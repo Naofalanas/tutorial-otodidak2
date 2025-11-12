@@ -22,14 +22,51 @@
             <a href="#home">Home</a>
             <a href="#about">Tentang Kami</a>
             <a href="#menu">Menu</a>
+            <a href="#products">Produk</a>
             <a href="#contact">Kontak</a>
         </div>
 
         <div class="navbar-extra">
-            <a href="#" id="search"><i data-feather="search"></i></a>
-            <a href="#" id="shopping-card"><i data-feather="shopping-cart"></i></a>
+            <a href="#" id="search-button"><i data-feather="search"></i></a>
+            <a href="#" id="shopping-cart-button"><i data-feather="shopping-cart"></i></a>
             <a href="#" id="hamburger-menu"><i data-feather="menu"></i></a>
         </div>
+
+        <!-- search form start -->
+        <div class="search-form">
+            <input type="search" id="search-box" placeholder="Cari disini...">
+            <label for="search-box"><i data-feather="search"></i></label>
+        </div>
+        <!-- search form end -->
+
+        <!-- shopping cart start -->
+        <div class="shopping-cart">
+            <div class="cart-item">
+                <img src="img/bijikopiproduk1.jpg" alt="Product 1">
+                <div class="item-detail">
+                    <h3>Product 1</h3>
+                    <div class="item-price">IDR 30K</div>
+                </div>
+                <i data-feather="trash-2" class="remove-item"></i>
+            </div>
+            <div class="cart-item">
+                <img src="img/bijikopiproduk1.jpg" alt="Product 1">
+                <div class="item-detail">
+                    <h3>Product 1</h3>
+                    <div class="item-price">IDR 30K</div>
+                </div>
+                <i data-feather="trash-2" class="remove-item"></i>
+            </div>
+            <div class="cart-item">
+                <img src="img/bijikopiproduk1.jpg" alt="Product 1">
+                <div class="item-detail">
+                    <h3>Product 1</h3>
+                    <div class="item-price">IDR 30K</div>
+                </div>
+                <i data-feather="trash-2" class="remove-item"></i>
+            </div>
+        </div>
+        <!-- shopping cart end -->
 
     </nav>
 
@@ -40,8 +77,7 @@
     <section class="hero" id="home">
         <main class="content">
             <h1>Nikmati secangkir <span>KOPI</span></h1>
-            <p>Tenangkan pikiran dan emosi dengan secangkir kopi setiap hari</p>
-            <a href="#" class="cta">Beli Sekarang</a>
+            <p>Mulailah hari Anda dengan kehangatan dan aroma kopi terbaik pilihan kami. Biarkan setiap tegukan membawa ketenangan.</p>
         </main>
     </section>
     <!-- hero section end -->
@@ -53,9 +89,9 @@
                 <img src="/img/kopi2.jpg" alt="Tentang Kami">
             </div>
             <div class="content">
-                <h3>Kenapa memilih kopi kami?</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid, quod?</p>
-                <p>Lorem ipsum dolor sit amet.</p>
+                <h3>Seni Secangkir Kopi Sempurna</h3>
+                <p>Bagi kami, kopi adalah gairah. Kami berkelana mencari biji kopi terbaik, menyangrainya dengan presisi, dan menyajikannya dengan hati. Semua untuk satu tujuan: memberikan Anda pengalaman rasa yang kaya dan otentik.</p>
+                <p>Rasakan dedikasi kami di setiap tegukan.</p>
             </div>
         </div>
     </section>
@@ -63,40 +99,110 @@
     <!-- menu section start -->
     <section id="menu" class="menu">
         <h2><span>Menu</span> Kami</h2>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsum, velit error. Maiores blanditiis ratione nihil?</p>
+        <p>Dari Espresso klasik yang membangkitkan semangat hingga Latte lembut yang menenangkan, temukan minuman favorit Anda di sini. Dibuat oleh barista ahli kami, khusus untuk Anda.</p>
         <div class="row">
             <div class="menu-card">
                 <img src="img/kopi1.jpg" alt="Espresso" class="menu-card-img">
                 <h3 class="menu-card-title">- Espresso -</h3>
-                <p class="menu-card-price">IDR 20K</p>
+                <p class="menu-card-price">IDR 22K</p>
             </div>
             <div class="menu-card">
                 <img src="img/kopi1.jpg" alt="Espresso" class="menu-card-img">
-                <h3 class="menu-card-title">- Espresso -</h3>
-                <p class="menu-card-price">IDR 20K</p>
+                <h3 class="menu-card-title">- Americano -</h3>
+                <p class="menu-card-price">IDR 22K</p>
             </div>
             <div class="menu-card">
                 <img src="img/kopi1.jpg" alt="Espresso" class="menu-card-img">
-                <h3 class="menu-card-title">- Espresso -</h3>
-                <p class="menu-card-price">IDR 20K</p>
+                <h3 class="menu-card-title">- Latte -</h3>
+                <p class="menu-card-price">IDR 22K</p>
             </div>
             <div class="menu-card">
                 <img src="img/kopi1.jpg" alt="Espresso" class="menu-card-img">
-                <h3 class="menu-card-title">- Espresso -</h3>
-                <p class="menu-card-price">IDR 20K</p>
+                <h3 class="menu-card-title">- Cappuccino -</h3>
+                <p class="menu-card-price">IDR 22K</p>
             </div>
             <div class="menu-card">
                 <img src="img/kopi1.jpg" alt="Espresso" class="menu-card-img">
-                <h3 class="menu-card-title">- Espresso -</h3>
-                <p class="menu-card-price">IDR 20K</p>
+                <h3 class="menu-card-title">- Macchiato -</h3>
+                <p class="menu-card-price">IDR 21K</p>
             </div>
         </div>
     </section>
     <!-- menu section end -->
+    <!-- produk section start -->
+    <section class="products" id="products">
+        <h2><span>Produk Unggulan</span> Kami</h2>
+        <p>Bawa pulang keajaiban Coffee Cafe. Biji kopi premium kami, yang dipilih dan disangrai dengan sempurna, kini tersedia untuk Anda seduh di rumah.</p>
+
+        <div class="row">
+            <div class="product-card">
+                <div class="product-icons">
+                    <a href="#"><i data-feather="shopping-cart"></i></a>
+                    <a href="#" class="item-detail-button"><i data-feather="eye"></i></a>
+                </div>
+                <div class="product-image">
+                    <img src="img/bijikopiproduk1.jpg" alt="Product 1">
+                </div>
+                <div class="product-content">
+                    <h3>Biji Kopi Arabika</h3>
+                    <div class="product-stars">
+                        <i data-feather="star"></i>
+                        <i data-feather="star"></i>
+                        <i data-feather="star"></i>
+                        <i data-feather="star"></i>
+                        <i data-feather="star"></i>
+                    </div>
+                    <div class="product-price">IDR 35K <span>IDR 55K</span></div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-icons">
+                    <a href="#"><i data-feather="shopping-cart"></i></a>
+                    <a href="#" class="item-detail-button"><i data-feather="eye"></i></a>
+                </div>
+                <div class="product-image">
+                    <img src="img/bijikopiproduk1.jpg" alt="Product 1">
+                </div>
+                <div class="product-content">
+                    <h3>Biji Kopi Robusta</h3>
+                    <div class="product-stars">
+                        <i data-feather="star" class="star-full"></i>
+                        <i data-feather="star" class="star-full"></i>
+                        <i data-feather="star" class="star-full"></i>
+                        <i data-feather="star" class="star-full"></i>
+                        <i data-feather="star" ></i>
+                    </div>
+                    <div class="product-price">IDR 35K <span>IDR 55K</span></div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-icons">
+                    <a href="#"><i data-feather="shopping-cart"></i></a>
+                    <a href="#" class="item-detail-button"><i data-feather="eye"></i></a>
+                </div>
+                <div class="product-image">
+                    <img src="img/bijikopiproduk1.jpg" alt="Product 1">
+                </div>
+                <div class="product-content">
+                    <h3>Biji Kopi Liberika</h3>
+                    <div class="product-stars">
+                        <i data-feather="star"></i>
+                        <i data-feather="star"></i>
+                        <i data-feather="star"></i>
+                        <i data-feather="star"></i>
+                        <i data-feather="star"></i>
+                    </div>
+                    <div class="product-price">IDR 32K <span>IDR 55K</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- produk section end -->
     <!-- contact section start -->
     <section id="contact" class="contact">
         <h2><span>Kontak</span> Kami</h2>
-        <p>Lorem ipsum dolor sit amet.</p>
+        <p>Kami senang mendengar dari Anda! Baik itu pertanyaan, masukan, atau sekadar ingin menyapa, jangan ragu untuk mengisi formulir di bawah ini.</p>
 
         <div class="row">
         <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d991.6591862717012!2d107.0359718480425!3d-6.179353552630095!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sid!4v1762839831442!5m2!1sen!2sid" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="map"></iframe>
@@ -139,6 +245,29 @@
         </div>
     </footer>
     <!-- footer section end -->
+    <!-- modal box item detail start -->
+    <div class="modal" id="item-detail-modal">
+        <div class="modal-container">
+            <a href="#" class="close-icon"><i data-feather="x"></i></1></a>
+            <div class="modal-content">
+                <img src="img/bijikopiproduk1.jpg" alt="Procut 1">
+                <div class="product-content">
+                    <h3>Product 1</h3>
+                    <p>Rasakan kekayaan cita rasa dari biji kopi Robusta pilihan kami. Dengan profil rasa yang kaya sentuhan cokelat dan karamel dan aroma yang harum dan menggugah, produk ini sempurna untuk diseduh kapan saja.</p>
+                    <div class="product-stars">
+                        <i data-feather="star" class="star-full"></i>
+                        <i data-feather="star" class="star-full"></i>
+                        <i data-feather="star" class="star-full"></i>
+                        <i data-feather="star" class="star-full"></i>
+                        <i data-feather="star" ></i>
+                    </div>
+                    <div class="product-price">IDR 30K <span>IDR 55K</span></div>
+                    <a href="#"><i data-feather="shopping-cart"></i><span>add to cart</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal box item detail end -->
     
     <!-- feather icons -->
     <script>

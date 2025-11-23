@@ -1,72 +1,65 @@
-// toggle class active untuk hamburger menu
-
-const navbarNav = document.querySelector('.navbar-nav');
-
-// ketika hamburger menu diklik
-document.querySelector('#hamburger-menu').onclick = () => {
-    navbarNav.classList.toggle('active');
+// Toggle Class Active untuk Hamburger Menu
+const navbarNav = document.querySelector(".navbar-nav");
+document.querySelector("#hamburger-menu").onclick = (e) => {
+  e.preventDefault();
+  navbarNav.classList.toggle("active");
 };
 
-// toggle class active untuk search form
-const searchForm = document.querySelector('.search-form');
-const searchBox = document.querySelector('#search-box');
-
-document.querySelector('#search-button').onclick = (e) => {
-    searchForm.classList.toggle('active');
-    searchBox.focus();
-    e.preventDefault();
+// Toggle Class Active untuk Search Form
+const searchForm = document.querySelector(".search-form");
+const searchBox = document.querySelector("#search-box");
+document.querySelector("#search-btn").onclick = (e) => {
+  e.preventDefault();
+  searchForm.classList.toggle("active");
+  searchBox.focus();
 };
 
-// toggle class active untuk shopping cart
-const shoppingCart = document.querySelector('.shopping-cart');
-document.querySelector('#shopping-cart-button').onclick = (e) => {
-    shoppingCart.classList.toggle('active');
-    e.preventDefault();
-}
+// Toggle Shopping Cart (Sidebar)
+const shoppingCart = document.querySelector(".shopping-cart");
+document.querySelector("#shopping-cart-btn").onclick = (e) => {
+  e.preventDefault();
+  shoppingCart.classList.toggle("active");
+};
 
+// Close Cart Button
+document.querySelector("#close-cart").onclick = (e) => {
+  e.preventDefault();
+  shoppingCart.classList.remove("active");
+};
 
+// Klik di Luar Elemen untuk Menutup
+const hm = document.querySelector("#hamburger-menu");
+const sb = document.querySelector("#search-btn");
+const sc = document.querySelector("#shopping-cart-btn");
 
-// klik di luar elemen
-
-const hm = document.querySelector('#hamburger-menu');
-const sb = document.querySelector('#search-button');
-const sc = document.querySelector('#shopping-cart-button');
-
-document.addEventListener('click', function(e){
-    if(!hm.contains(e.target) && !navbarNav.contains(e.target)){
-        navbarNav.classList.remove('active');
-    }
-    if(!sb.contains(e.target) && !searchForm.contains(e.target)){
-        searchForm.classList.remove('active');
-    }
-    if(!sc.contains(e.target) && !shoppingCart.contains(e.target)){
-        shoppingCart.classList.remove('active');
-    }
+document.addEventListener("click", function (e) {
+  // Jika klik di luar hamburger & navbar, tutup navbar
+  if (!hm.contains(e.target) && !navbarNav.contains(e.target)) {
+    navbarNav.classList.remove("active");
+  }
+  // Jika klik di luar search btn & form, tutup form
+  if (!sb.contains(e.target) && !searchForm.contains(e.target)) {
+    searchForm.classList.remove("active");
+  }
+  // Jika klik di luar cart btn & cart sidebar, tutup cart
+  if (!sc.contains(e.target) && !shoppingCart.contains(e.target)) {
+    shoppingCart.classList.remove("active");
+  }
 });
 
-// modal box
-const itemDetailModal = document.querySelector('#item-detail-modal');
-const itemDetailButtons = document.querySelectorAll('.item-detail-button');
+// --- ANIMASI SCROLL (Scroll Reveal) ---
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("active");
+      }
+    });
+  },
+  { threshold: 0.1 }
+);
 
-itemDetailButtons.forEach((btn) => {
-    btn.onclick = (e) => {
-        itemDetailModal.style.display = 'flex';
-        e.preventDefault();
-    }
-})
-
-itemDetailButtons.onclick = (e) => {
-}
-
-// click tombol close modal box
-document.querySelector('.modal .close-icon').onclick = (e) => {
-    itemDetailModal.style.display = 'none'
-    e.preventDefault();
-}
-
-// click di luar modal box
-window.onclick = (e) => {
-    if (e.target === itemDetailModal) {
-        itemDetailModal.style.display = 'none'
-    }
-}
+const hiddenElements = document.querySelectorAll(
+  ".reveal-text, .reveal-left, .reveal-right, .reveal-bottom"
+);
+hiddenElements.forEach((el) => observer.observe(el));

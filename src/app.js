@@ -1,82 +1,190 @@
-document.addEventListener('alpine:init', () => {
-    Alpine.data('products', () => ({
-        items: [
-            { id: 1, name: 'Robusta Brazil', img: '1.jpg', price: 25000},
-            { id: 2, name: 'Arabica Brazil', img: '2.jpg', price: 23000},
-            { id: 3, name: 'Liberika Brazil', img: '3.jpg', price: 24000},
-        ],
-    }));
+document.addEventListener("alpine:init", () => {
+  // GANTI BAGIAN STORE CATALOG SAJA
+  Alpine.store("catalog", {
+    items: [
+      {
+        id: 1,
+        name: "Robusta Brazil",
+        img: "1.jpg",
+        price: 24000,
+        desc: "Kopi dengan karakter body yang tebal dan rasa pahit cokelat yang dominan. Cocok untuk Anda yang butuh asupan kafein tinggi dan rasa yang nendang.",
+      },
+      {
+        id: 2,
+        name: "Arabica Blend",
+        img: "2.jpg",
+        price: 25000,
+        desc: "Perpaduan biji pilihan dengan tingkat keasaman medium dan aroma floral yang menenangkan. Rasa seimbang yang pas untuk dinikmati kapan saja.",
+      },
+      {
+        id: 3,
+        name: "Primo Passo",
+        img: "3.jpg",
+        price: 26000,
+        desc: "Signature blend kami untuk pecinta Espresso. Menghasilkan crema yang tebal, tekstur creamy, dengan aftertaste kacang-kacangan yang manis.",
+      },
+      {
+        id: 4,
+        name: "Aceh Gayo",
+        img: "3.jpg",
+        price: 25000,
+        desc: "Kopi legendaris Indonesia. Memiliki aroma bumi (earthy) yang khas, body yang berat, dan tingkat keasaman rendah. Favorit pecinta kopi hitam.",
+      },
+      {
+        id: 5,
+        name: "Sumatra Mandheling",
+        img: "3.jpg",
+        price: 28000,
+        desc: "Kopi premium dengan tekstur syrupy yang kental. Kompleksitas rasa herbal dan rempah eksotis yang tidak bisa Anda temukan di kopi lain.",
+      },
+    ],
+    search: "",
+    get filteredItems() {
+      return this.items.filter((item) =>
+        item.name.toLowerCase().includes(this.search.toLowerCase())
+      );
+    },
+  });
 
-    Alpine.store('cart', {
-        items:[],
-        total: 0,
-        quantity: 0,
-        add(newItem) {
-            //cek apakah ada item yang sama di cart
-            const cartItem = this.items.find((item) => item.id === newItem.id);
+  // 2. STORE CART (Keranjang Belanja)
+  Alpine.store("cart", {
+    items: [],
+    total: 0,
+    quantity: 0,
+    init() {
+      const storedCart = localStorage.getItem("cart");
+      if (storedCart) {
+        this.items = JSON.parse(storedCart);
+        this.quantity = this.items.reduce(
+          (acc, item) => acc + item.quantity,
+          0
+        );
+        this.total = this.items.reduce((acc, item) => acc + item.total, 0);
+      }
+    },
+    add(newItem) {
+      const cartItem = this.items.find((item) => item.id === newItem.id);
+      if (!cartItem) {
+        this.items.push({ ...newItem, quantity: 1, total: newItem.price });
+        this.quantity++;
+        this.total += newItem.price;
+      } else {
+        this.items = this.items.map((item) => {
+          if (item.id !== newItem.id) return item;
+          item.quantity++;
+          item.total = item.price * item.quantity;
+          this.quantity++;
+          this.total += item.price;
+          return item;
+        });
+      }
+      this.save();
+      // Panggil Notifikasi
+      Alpine.store("notification").notify(`${newItem.name} masuk keranjang!`);
+    },
+    remove(id) {
+      const cartItem = this.items.find((item) => item.id === id);
+      if (cartItem.quantity > 1) {
+        this.items = this.items.map((item) => {
+          if (item.id !== id) return item;
+          item.quantity--;
+          item.total = item.price * item.quantity;
+          this.quantity--;
+          this.total -= item.price;
+          return item;
+        });
+      } else if (cartItem.quantity === 1) {
+        this.items = this.items.filter((item) => item.id !== id);
+        this.quantity--;
+        this.total -= cartItem.price;
+      }
+      this.save();
+    },
+    save() {
+      localStorage.setItem("cart", JSON.stringify(this.items));
+    },
+    checkout(customerData) {
+      if (
+        !customerData.name.trim() ||
+        !customerData.email.trim() ||
+        !customerData.phone.trim()
+      ) {
+        Alpine.store("notification").notify(
+          "Data pelanggan tidak boleh kosong!"
+        );
+        return;
+      }
+      // 1. Validasi Input Kosong
+      if (
+        !customerData.name.trim() ||
+        !customerData.email.trim() ||
+        !customerData.phone.trim()
+      ) {
+        Alpine.store("notification").notify(
+          "Data pelanggan tidak boleh kosong!"
+        );
+        return;
+      }
 
-            // jika belom ada
-            if(!cartItem){
-                this.items.push({...newItem, quantity: 1, total: newItem.price});
-                this.quantity++;
-                this.total += newItem.price;
+      // 2. [BARU] Validasi Format Nomor HP
+      // Cek apakah panjang nomor kurang dari 10 digit?
+      if (customerData.phone.length < 10) {
+        Alpine.store("notification").notify(
+          "Nomor WhatsApp tidak valid (min. 10 angka)!"
+        );
+        return;
+      }
+      if (this.items.length === 0) return;
+      const itemsList = this.items
+        .map(
+          (item) => `${item.name} (${item.quantity} x ${rupiah(item.price)})`
+        )
+        .join("\n");
+      const message = `Halo Kopi Senja, saya mau pesan:\n\n${itemsList}\n\nTotal: ${rupiah(
+        this.total
+      )}\n\n-- Data Pemesan --\nNama: ${customerData.name}\nEmail: ${
+        customerData.email
+      }\nNo HP: ${customerData.phone}`;
+      window.open(
+        `https://wa.me/6285777136377?text=${encodeURIComponent(message)}`
+      );
+    },
+  });
 
-            } else {
-                //jika barang udah ada, apakah beda atau sama 
-                this.items = this.items.map((item) => {
-                    //jika barang beda
-                    if(item.id !== newItem.id){
-                        return item;
-                    } else {
-                        // jika barng ada tambah quantity dan subtotal
-                        item.quantity++;
-                        item.total = item.price * item.quantity;
-                        this.quantity++;
-                        this.total += item.price;
-                        return item;
+  // 3. STORE DETAIL (Untuk Modal Popup)
+  Alpine.store("detail", {
+    isOpen: false,
+    item: {}, // Awalnya kosong, ini yang bikin error kalau gak di-handle di HTML
+    show(newItem) {
+      this.item = newItem;
+      this.isOpen = true;
+    },
+    close() {
+      this.isOpen = false;
+    },
+  });
 
-                    }
-                })
-            }
-
-        },
-        remove(id) {
-            // ambil item yang mau diremove berdasarkan id
-            const cartItem = this.items.find((item) => item.id === id );
-
-            // jika item lebih dari 1
-            if(cartItem.quantity > 1) {
-                // telusuri satu satu
-                this.items = this.items.map ((item) => {
-                    // jika bukan barang yang di klik, skip
-                    if (item.id !== id ) {
-                        return item;
-                    } else {
-                        item.quantity--;
-                        item.total = item.price * item.quantity;
-                        this.quantity--;
-                        this.total -= item.price;
-                        return item;
-                    }
-                })
-            }else if (cartItem.quantity === 1) {
-                // jika barang sisa 1
-                this.items = this.items.filter ((item) => item.id !== id);
-                this.quantity --;
-                this.total -= cartItem.price;
-            }
-
-        }
-    });
+  // 4. STORE NOTIFICATION (Toast)
+  Alpine.store("notification", {
+    show: false,
+    message: "",
+    timeout: null,
+    notify(msg) {
+      this.message = msg;
+      this.show = true;
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {
+        this.show = false;
+      }, 3000);
+    },
+  });
 });
 
-
-// konversi ke Rupiah
-
+// Helper Rupiah
 const rupiah = (number) => {
-    return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0,
-    }).format(number);
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    minimumFractionDigits: 0,
+  }).format(number);
 };

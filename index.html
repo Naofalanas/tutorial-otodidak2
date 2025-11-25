@@ -22,7 +22,7 @@
     ></script>
     <script src="src/app.js"></script>
   </head>
-  <body>
+  <body x-data="{ itemDetailModal: false, currentItem: {} }">
     <nav class="navbar" x-data>
       <a href="#" class="navbar-logo">Kopi<span>Senja</span>.</a>
 
@@ -48,7 +48,12 @@
       </div>
 
       <div class="search-form">
-        <input type="search" id="search-box" placeholder="Cari produk..." />
+        <input
+          type="search"
+          id="search-box"
+          placeholder="Cari produk..."
+          x-model="$store.catalog.search"
+        />
         <label for="search-box"><i data-feather="search"></i></label>
       </div>
     </nav>
@@ -89,23 +94,34 @@
           <span>Total:</span>
           <span x-text="rupiah($store.cart.total)"></span>
         </div>
-        <div class="form-container">
-          <form id="checkoutForm">
+        <div class="form-container" x-data="{ name: '', email: '', phone: '' }">
+          <form
+            id="checkoutForm"
+            @submit.prevent="$store.cart.checkout({ name, email, phone })"
+          >
             <h5>Data Pelanggan</h5>
             <input
               type="text"
-              name="name"
+              x-model="name"
               placeholder="Nama Lengkap"
               required
             />
-            <input type="email" name="email" placeholder="Email" required />
+            <input type="email" x-model="email" placeholder="Email" required />
             <input
               type="tel"
-              name="phone"
+              x-model="phone"
               placeholder="No. WhatsApp"
               required
             />
-            <button type="submit" class="btn-checkout">Checkout</button>
+
+            <button
+              type="submit"
+              class="btn-checkout"
+              :disabled="$store.cart.items.length === 0"
+              :class="{ 'disabled': $store.cart.items.length === 0 }"
+            >
+              Checkout via WhatsApp
+            </button>
           </form>
         </div>
       </div>
@@ -168,12 +184,15 @@
       </div>
     </section>
 
-    <section class="products section-padding" id="products" x-data="products">
+    <section class="products section-padding" id="products" x-data>
       <h2 class="section-title">Biji Kopi <span>Premium</span></h2>
       <p class="section-desc">Bawa pulang kualitas kafe ke rumah Anda.</p>
 
       <div class="product-grid">
-        <template x-for="(item, index) in items" x-key="index">
+        <template
+          x-for="(item, index) in $store.catalog.filteredItems"
+          :key="index"
+        >
           <div class="product-card">
             <div class="product-icons">
               <a href="#" @click.prevent="$store.cart.add(item)">
@@ -189,7 +208,11 @@
                   <use href="img/feather-sprite.svg#shopping-cart" />
                 </svg>
               </a>
-              <a href="#" class="item-detail-button">
+              <a
+                href="#"
+                class="item-detail-button"
+                @click.prevent="$store.detail.show(item)"
+              >
                 <svg
                   width="24"
                   height="24"
@@ -203,71 +226,68 @@
                 </svg>
               </a>
             </div>
+
             <div class="product-image">
               <img :src="`img/${item.img}`" :alt="item.name" />
             </div>
+
             <div class="product-content">
               <h3 x-text="item.name"></h3>
               <div class="stars">
                 <svg
-                  width="18"
-                  height="18"
+                  width="24"
+                  height="24"
                   fill="currentColor"
                   stroke="currentColor"
                   stroke-width="2"
-                  viewBox="0 0 24 24"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
                 >
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
+                  <use href="img/feather-sprite.svg#star" />
                 </svg>
                 <svg
-                  width="18"
-                  height="18"
+                  width="24"
+                  height="24"
                   fill="currentColor"
                   stroke="currentColor"
                   stroke-width="2"
-                  viewBox="0 0 24 24"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
                 >
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
+                  <use href="img/feather-sprite.svg#star" />
                 </svg>
                 <svg
-                  width="18"
-                  height="18"
+                  width="24"
+                  height="24"
                   fill="currentColor"
                   stroke="currentColor"
                   stroke-width="2"
-                  viewBox="0 0 24 24"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
                 >
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
+                  <use href="img/feather-sprite.svg#star" />
                 </svg>
                 <svg
-                  width="18"
-                  height="18"
+                  width="24"
+                  height="24"
                   fill="currentColor"
                   stroke="currentColor"
                   stroke-width="2"
-                  viewBox="0 0 24 24"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
                 >
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
+                  <use href="img/feather-sprite.svg#star" />
                 </svg>
                 <svg
-                  width="18"
-                  height="18"
+                  width="24"
+                  height="24"
                   fill="currentColor"
                   stroke="currentColor"
                   stroke-width="2"
-                  viewBox="0 0 24 24"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
                 >
-                  <polygon
-                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                  ></polygon>
+                  <use href="img/feather-sprite.svg#star" />
                 </svg>
               </div>
               <div class="product-price" x-text="rupiah(item.price)"></div>
@@ -275,17 +295,25 @@
           </div>
         </template>
       </div>
+
+      <h3
+        x-show="$store.catalog.filteredItems.length === 0"
+        style="text-align: center; color: #fff; margin-top: 2rem"
+      >
+        Produk tidak ditemukan.
+      </h3>
     </section>
 
     <section id="contact" class="contact section-padding">
       <h2 class="section-title">Kontak <span>Kami</span></h2>
       <div class="row">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126748.56347862248!2d107.57311705249023!3d-6.903444341687889!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e6398252477f%3A0x146a1f93d3e815b2!2sBandung%2C%20Kota%20Bandung%2C%20Jawa%20Barat!5e0!3m2!1sid!2sid!4v1672408575523!5m2!1sid!2sid"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126907.08894178385!2d106.7865!3d-6.2297!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f3e945e34b9d%3A0x5371bf0fdad786a2!2sJakarta%2C%20Daerah%20Khusus%20Ibukota%20Jakarta!5e0!3m2!1sid!2sid!4v1675148633333!5m2!1sid!2sid"
           allowfullscreen=""
           loading="lazy"
           class="map"
-        ></iframe>
+        >
+        </iframe>
 
         <form action="" class="reveal-right">
           <div class="input-group">
@@ -318,7 +346,7 @@
         <a href="#contact">Kontak</a>
       </div>
       <div class="credit">
-        <p>Created by <a href="">naofalanas</a>. | © 2025.</p>
+        <p>Created by <a href="">naofalanassetianto</a>. | © 2025.</p>
       </div>
     </footer>
 
@@ -326,5 +354,67 @@
       feather.replace();
     </script>
     <script src="script.js"></script>
+
+    <div
+      class="modal"
+      id="item-detail-modal"
+      x-data
+      x-show="$store.detail.isOpen"
+      x-transition.opacity
+      style="display: none"
+      @click="$store.detail.close()"
+    >
+      <div class="modal-container" @click.stop>
+        <a href="#" class="close-icon" @click.prevent="$store.detail.close()">
+          <i data-feather="x"></i>
+        </a>
+
+        <div class="modal-content">
+          <template x-if="$store.detail.item.img">
+            <img
+              :src="`img/${$store.detail.item.img}`"
+              :alt="$store.detail.item.name"
+            />
+          </template>
+          <div class="product-content">
+            <h3 x-text="$store.detail.item.name"></h3>
+
+            <p
+              x-text="$store.detail.item.desc"
+              style="
+                font-size: 1rem;
+                line-height: 1.6;
+                color: #ccc;
+                margin-top: 1rem;
+              "
+            ></p>
+
+            <div class="product-stars">...</div>
+            <div
+              class="product-price"
+              x-text="rupiah($store.detail.item.price)"
+            ></div>
+            ...
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="toast"
+      x-data
+      x-show="$store.notification.show"
+      x-transition.duration.500ms
+    >
+      <div class="toast-content">
+        <i
+          data-feather="check-circle"
+          style="color: green; margin-right: 10px"
+        ></i>
+        <span x-text="$store.notification.message"></span>
+      </div>
+    </div>
   </body>
 </html>
+<script>
+  feather.replace();
+</script>

@@ -1,11 +1,12 @@
 :root {
-  --primary: #b6895b;
-  --primary-dark: #8c6a46;
-  --bg: #010101;
-  --bg-card: #1a1a1a;
-  --text: #fff;
-  --text-muted: #aaa;
-  --shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  --primary: #cda45e; /* Gold yang lebih elegan */
+  --primary-dark: #a9853e;
+  --bg: #0b0b0b; /* Bukan hitam pekat, tapi dark grey very deep */
+  --bg-card: #151515;
+  --text: #ffffff;
+  --text-muted: #888888;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --border: #333;
 }
 
 * {
@@ -56,14 +57,15 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 7%;
-  background-color: rgba(1, 1, 1, 0.85);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid #333;
+  background-color: rgba(0, 0, 0, 0.6); /* Lebih transparan */
+  backdrop-filter: blur(15px); /* Blur lebih kuat */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000; /* Pastikan di atas konten biasa */
+  z-index: 1000;
+  transition: 0.3s;
 }
 
 .navbar-logo {
@@ -98,6 +100,11 @@ body {
 }
 .navbar-nav a:hover::after {
   transform: scaleX(0.6);
+}
+
+.navbar-nav {
+  display: flex; /* Ensure flex behavior on desktop */
+  align-items: center;
 }
 
 /* --- PERBAIKAN BADGE & TOMBOL --- */
@@ -137,23 +144,23 @@ body {
 
 /* SHOPPING CART SIDEBAR (FIXED POSITION) */
 .shopping-cart {
-  position: fixed; /* Keluar dari flow navbar */
+  position: fixed;
   top: 0;
-  right: -100%;
+  right: -100%; /* Default hidden */
   height: 100vh;
-  width: 380px;
-  background-color: #111;
-  z-index: 99999; /* Paling atas, di atas navbar */
-  padding: 2rem 1.5rem;
-  transition: 0.4s ease;
-  border-left: 1px solid #333;
+  width: 350px;
+  background-color: var(--bg-card);
+  z-index: 99999;
+  padding: 2rem;
+  transition: right 0.4s ease-in-out; /* Smooth transition */
+  border-left: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.7);
+  box-shadow: -5px 0 20px rgba(0, 0, 0, 0.8);
 }
 
 .shopping-cart.active {
-  right: 0;
+  right: 0; /* Slide in */
 }
 
 .cart-header {
@@ -257,13 +264,24 @@ body {
   padding: 12px;
   background: var(--primary);
   color: #000;
-  font-weight: bold;
+  font-weight: 700;
+  letter-spacing: 1px;
   border-radius: 5px;
   cursor: pointer;
   transition: 0.3s;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  border: none;
 }
 .btn-checkout:hover {
   background: var(--primary-dark);
+  box-shadow: 0 0 15px rgba(205, 164, 94, 0.4);
+}
+.btn-checkout.disabled {
+  background-color: #333;
+  color: #666;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 /* HERO SECTION */
@@ -365,6 +383,9 @@ body {
   border-radius: 15px;
   text-align: center;
   transition: 0.3s;
+  max-width: 400px; /* Prevent full-width stretching */
+  margin: 0 auto; /* Center in grid cell */
+  width: 100%; /* Ensure it fills up to max-width */
 }
 .menu-card:hover,
 .product-card:hover {
@@ -372,46 +393,61 @@ body {
   transform: translateY(-5px);
   box-shadow: var(--shadow);
 }
-.menu-img,
-.product-image img {
+.menu-img {
   height: 150px;
   object-fit: contain;
   margin-bottom: 1rem;
-  filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.5));
 }
-.menu-title,
-.product-content h3 {
-  font-size: 1.3rem;
-  margin-bottom: 0.5rem;
+/* PRODUCT CARD & ICONS */
+.product-image {
+  position: relative;
+  overflow: hidden; /* Ensure icons don't spill out */
 }
-.menu-price,
-.product-price {
-  font-weight: bold;
-  color: var(--primary);
-  font-size: 1.1rem;
+.product-image img {
+  height: 200px; /* Increased height for better look */
+  width: 100%;
+  object-fit: cover;
+  transition: 0.3s;
 }
 
+/* Icons Overlay */
 .product-icons {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 0.8rem;
+  z-index: 10;
+  opacity: 0;
+  transition: 0.3s;
 }
+
+.product-card:hover .product-icons {
+  opacity: 1;
+}
+.product-card:hover .product-image img {
+  transform: scale(1.1);
+  filter: brightness(0.7); /* Darken image to reveal white icons */
+}
+
+/* Buttons style inside overlay */
 .product-icons a {
-  width: 35px;
-  height: 35px;
-  border: 1px solid #666;
+  width: 45px;
+  height: 45px;
+  background: #fff;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: #000;
   transition: 0.3s;
+  border: none;
 }
 .product-icons a:hover {
   background: var(--primary);
-  border-color: var(--primary);
-  color: #000;
+  color: #fff;
+  transform: scale(1.1);
 }
 .stars {
   color: var(--primary);
@@ -420,6 +456,45 @@ body {
 }
 .stars .star-full {
   fill: var(--primary);
+}
+
+/* FILTER BUTTONS */
+.filter-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  padding: 0.5rem 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--primary);
+  color: #fff;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-family: inherit;
+}
+.filter-btn:hover,
+.filter-btn.active {
+  background: var(--primary);
+  color: #000;
+}
+
+.product-image {
+  position: relative;
+}
+.product-category {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-size: 0.7rem;
+  border: 1px solid var(--primary);
 }
 
 /* SEARCH FORM */
@@ -566,11 +641,11 @@ footer .links a:hover {
     position: absolute;
     top: 100%;
     right: -100%;
-    background: #010101;
+    background: var(--bg-card); /* Consistent theme */
     width: 70%;
     height: 100vh;
     transition: 0.3s;
-    border-left: 1px solid #333;
+    border-left: 1px solid var(--border);
     display: block;
     padding-top: 2rem;
   }

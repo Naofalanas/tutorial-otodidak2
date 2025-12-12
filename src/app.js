@@ -1,12 +1,15 @@
 document.addEventListener("alpine:init", () => {
   // GANTI BAGIAN STORE CATALOG SAJA
   Alpine.store("catalog", {
+    categories: ["All", "Robusta", "Arabica", "Blend"],
+    selectedCategory: "All",
     items: [
       {
         id: 1,
         name: "Robusta Brazil",
         img: "1.jpg",
         price: 24000,
+        category: "Robusta",
         desc: "Kopi dengan karakter body yang tebal dan rasa pahit cokelat yang dominan. Cocok untuk Anda yang butuh asupan kafein tinggi dan rasa yang nendang.",
       },
       {
@@ -14,6 +17,7 @@ document.addEventListener("alpine:init", () => {
         name: "Arabica Blend",
         img: "2.jpg",
         price: 25000,
+        category: "Arabica",
         desc: "Perpaduan biji pilihan dengan tingkat keasaman medium dan aroma floral yang menenangkan. Rasa seimbang yang pas untuk dinikmati kapan saja.",
       },
       {
@@ -21,6 +25,7 @@ document.addEventListener("alpine:init", () => {
         name: "Primo Passo",
         img: "3.jpg",
         price: 26000,
+        category: "Blend",
         desc: "Signature blend kami untuk pecinta Espresso. Menghasilkan crema yang tebal, tekstur creamy, dengan aftertaste kacang-kacangan yang manis.",
       },
       {
@@ -28,6 +33,7 @@ document.addEventListener("alpine:init", () => {
         name: "Aceh Gayo",
         img: "3.jpg",
         price: 25000,
+        category: "Arabica",
         desc: "Kopi legendaris Indonesia. Memiliki aroma bumi (earthy) yang khas, body yang berat, dan tingkat keasaman rendah. Favorit pecinta kopi hitam.",
       },
       {
@@ -35,15 +41,60 @@ document.addEventListener("alpine:init", () => {
         name: "Sumatra Mandheling",
         img: "3.jpg",
         price: 28000,
+        category: "Arabica",
         desc: "Kopi premium dengan tekstur syrupy yang kental. Kompleksitas rasa herbal dan rempah eksotis yang tidak bisa Anda temukan di kopi lain.",
       },
     ],
     search: "",
     get filteredItems() {
-      return this.items.filter((item) =>
-        item.name.toLowerCase().includes(this.search.toLowerCase())
-      );
+      return this.items.filter((item) => {
+        const matchesSearch = item.name
+          .toLowerCase()
+          .includes(this.search.toLowerCase());
+        const matchesCategory =
+          this.selectedCategory === "All" ||
+          item.category === this.selectedCategory;
+        return matchesSearch && matchesCategory;
+      });
     },
+    filterCategory(category) {
+      this.selectedCategory = category;
+    },
+  });
+
+  // STORE UI (NEW: Mengatur Tampilan Sidebar/Modal)
+  Alpine.store("ui", {
+    isNavbarOpen: false,
+    isSearchOpen: false,
+    isCartOpen: false,
+
+    toggleNavbar() {
+      this.isNavbarOpen = !this.isNavbarOpen;
+      if (this.isNavbarOpen) {
+        this.isSearchOpen = false;
+        this.isCartOpen = false;
+      }
+    },
+    toggleSearch() {
+      this.isSearchOpen = !this.isSearchOpen;
+      if (this.isSearchOpen) {
+        this.isNavbarOpen = false;
+        this.isCartOpen = false;
+        // Focus logic will be handled in HTML x-effect or $nextTick
+      }
+    },
+    toggleCart() {
+      this.isCartOpen = !this.isCartOpen;
+      if (this.isCartOpen) {
+        this.isNavbarOpen = false;
+        this.isSearchOpen = false;
+      }
+    },
+    closeAll() {
+      this.isNavbarOpen = false;
+      this.isSearchOpen = false;
+      this.isCartOpen = false;
+    }
   });
 
   // 2. STORE CART (Keranjang Belanja)

@@ -22,14 +22,15 @@
     ></script>
     <script src="src/app.js"></script>
   </head>
-  <body x-data="{ itemDetailModal: false, currentItem: {} }" x-init="feather.replace()">
+  <body
+    x-data="{ itemDetailModal: false, currentItem: {} }"
+    x-init="feather.replace()"
+  >
     <nav class="navbar" x-data>
       <a href="#" class="navbar-logo">Kopi<span>Senja</span>.</a>
 
-
-
-      <div 
-        class="navbar-nav" 
+      <div
+        class="navbar-nav"
         :class="{ 'active': $store.ui.isNavbarOpen }"
         @click.outside="if($store.ui.isNavbarOpen && !$event.target.closest('#hamburger-menu')) $store.ui.isNavbarOpen = false"
       >
@@ -44,7 +45,11 @@
         <a href="#" id="search-btn" @click.prevent="$store.ui.toggleSearch()">
           <i data-feather="search"></i>
         </a>
-        <a href="#" id="shopping-cart-btn" @click.prevent="$store.ui.toggleCart()">
+        <a
+          href="#"
+          id="shopping-cart-btn"
+          @click.prevent="$store.ui.toggleCart()"
+        >
           <i data-feather="shopping-cart"></i>
           <span
             class="badge"
@@ -52,13 +57,17 @@
             x-text="$store.cart.quantity"
           ></span>
         </a>
-        <a href="#" id="hamburger-menu" @click.prevent="$store.ui.toggleNavbar()">
+        <a
+          href="#"
+          id="hamburger-menu"
+          @click.prevent="$store.ui.toggleNavbar()"
+        >
           <i data-feather="menu"></i>
         </a>
       </div>
 
-      <div 
-        class="search-form" 
+      <div
+        class="search-form"
         :class="{ 'active': $store.ui.isSearchOpen }"
         @click.outside="if($store.ui.isSearchOpen && !$event.target.closest('#search-btn')) $store.ui.isSearchOpen = false"
       >
@@ -71,32 +80,30 @@
         />
         <label for="search-box"><i data-feather="search"></i></label>
       </div>
-
-
     </nav>
 
     <!-- Shopping Cart Sidebar -->
-    <div 
-      class="shopping-cart" 
+    <div
+      class="shopping-cart"
       :class="{ 'active': $store.ui.isCartOpen }"
       @click.outside="if($store.ui.isCartOpen && !$event.target.closest('#shopping-cart-btn')) $store.ui.isCartOpen = false"
     >
       <div class="cart-header">
         <h3>Keranjang Belanja</h3>
         <!-- Pake SVG langsung supaya pasti muncul -->
-        <svg 
-          id="close-cart" 
-          @click="$store.ui.toggleCart()" 
-          xmlns="http://www.w3.org/2000/svg" 
-          width="24" 
-          height="24" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          stroke-width="2" 
-          stroke-linecap="round" 
+        <svg
+          id="close-cart"
+          @click="$store.ui.toggleCart()"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
           stroke-linejoin="round"
-          style="cursor: pointer; color: #fff;"
+          style="cursor: pointer; color: #fff"
         >
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -206,17 +213,17 @@
 
       <div class="menu-grid">
         <div class="menu-card reveal-bottom">
-          <img src="img/kopi1.jpg" alt="Espresso" class="menu-img" />
+          <img src="img/menu1.jpg" alt="Espresso" class="menu-img" />
           <h3 class="menu-title">- Espresso -</h3>
           <p class="menu-price">IDR 18K</p>
         </div>
         <div class="menu-card reveal-bottom">
-          <img src="img/kopi1.jpg" alt="Latte" class="menu-img" />
+          <img src="img/menu2.jpg" alt="Latte" class="menu-img" />
           <h3 class="menu-title">- Latte -</h3>
           <p class="menu-price">IDR 24K</p>
         </div>
         <div class="menu-card reveal-bottom">
-          <img src="img/kopi1.jpg" alt="Cappuccino" class="menu-img" />
+          <img src="img/menu3.jpg" alt="Cappuccino" class="menu-img" />
           <h3 class="menu-title">- Cappuccino -</h3>
           <p class="menu-price">IDR 25K</p>
         </div>
@@ -226,11 +233,11 @@
     <section class="products section-padding" id="products" x-data>
       <h2 class="section-title">Biji Kopi <span>Premium</span></h2>
       <p class="section-desc">Bawa pulang kualitas kafe ke rumah Anda.</p>
-      
+
       <!-- Filter Buttons -->
       <div class="filter-container">
         <template x-for="cat in $store.catalog.categories">
-          <button 
+          <button
             @click="$store.catalog.filterCategory(cat)"
             :class="{ 'active': $store.catalog.selectedCategory === cat }"
             class="filter-btn"
@@ -250,12 +257,32 @@
               <img :src="`img/${item.img}`" :alt="item.name" />
               <div class="product-icons">
                 <a href="#" @click.prevent="$store.cart.add(item)">
-                  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <svg
+                    width="24"
+                    height="24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
                     <use href="img/feather-sprite.svg#shopping-cart" />
                   </svg>
                 </a>
-                <a href="#" class="item-detail-button" @click.prevent="$store.detail.show(item)">
-                  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <a
+                  href="#"
+                  class="item-detail-button"
+                  @click.prevent="$store.detail.show(item)"
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
                     <use href="img/feather-sprite.svg#eye" />
                   </svg>
                 </a>
@@ -339,12 +366,14 @@
       <h2 class="section-title">Kontak <span>Kami</span></h2>
       <div class="row">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126907.08894178385!2d106.7865!3d-6.2297!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f3e945e34b9d%3A0x5371bf0fdad786a2!2sJakarta%2C%20Daerah%20Khusus%20Ibukota%20Jakarta!5e0!3m2!1sid!2sid!4v1675148633333!5m2!1sid!2sid"
+          src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3966.6371040671656!2d107.03346207453048!3d-6.1793056605478975!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNsKwMTAnNDUuNSJTIDEwN8KwMDInMDkuNyJF!5e0!3m2!1sid!2sid!4v1767248796250!5m2!1sid!2sid"
+          width="600"
+          height="450"
+          style="border: 0"
           allowfullscreen=""
           loading="lazy"
-          class="map"
-        >
-        </iframe>
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
 
         <form action="" class="reveal-right">
           <div class="input-group">
@@ -381,10 +410,9 @@
       </div>
     </footer>
 
-
     <!-- Inline Scroll Reveal Script to replace script.js -->
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
+      document.addEventListener("DOMContentLoaded", () => {
         const observer = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
@@ -401,13 +429,13 @@
         );
         hiddenElements.forEach((el) => observer.observe(el));
       });
-      
+
       // Close UI elements when clicking outside
-      document.addEventListener('click', (e) => {
-        const ui = Alpine.store('ui');
+      document.addEventListener("click", (e) => {
+        const ui = Alpine.store("ui");
         if (!ui) return;
       });
-      
+
       // Initialize Feather Icons once
       feather.replace();
     </script>
@@ -472,4 +500,3 @@
     </div>
   </body>
 </html>
-

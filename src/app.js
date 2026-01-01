@@ -1,68 +1,38 @@
 document.addEventListener("alpine:init", () => {
-  // GANTI BAGIAN STORE CATALOG SAJA
   Alpine.store("catalog", {
     categories: ["All", "Robusta", "Arabica", "Blend"],
     selectedCategory: "All",
-    items: [
-      {
-        id: 1,
-        name: "Robusta Brazil",
-        img: "1.jpg",
-        price: 24000,
-        category: "Robusta",
-        desc: "Kopi dengan karakter body yang tebal dan rasa pahit cokelat yang dominan. Cocok untuk Anda yang butuh asupan kafein tinggi dan rasa yang nendang.",
-      },
-      {
-        id: 2,
-        name: "Arabica Blend",
-        img: "2.jpg",
-        price: 25000,
-        category: "Arabica",
-        desc: "Perpaduan biji pilihan dengan tingkat keasaman medium dan aroma floral yang menenangkan. Rasa seimbang yang pas untuk dinikmati kapan saja.",
-      },
-      {
-        id: 3,
-        name: "Primo Passo",
-        img: "3.jpg",
-        price: 26000,
-        category: "Blend",
-        desc: "Signature blend kami untuk pecinta Espresso. Menghasilkan crema yang tebal, tekstur creamy, dengan aftertaste kacang-kacangan yang manis.",
-      },
-      {
-        id: 4,
-        name: "Aceh Gayo",
-        img: "3.jpg",
-        price: 25000,
-        category: "Arabica",
-        desc: "Kopi legendaris Indonesia. Memiliki aroma bumi (earthy) yang khas, body yang berat, dan tingkat keasaman rendah. Favorit pecinta kopi hitam.",
-      },
-      {
-        id: 5,
-        name: "Sumatra Mandheling",
-        img: "3.jpg",
-        price: 28000,
-        category: "Arabica",
-        desc: "Kopi premium dengan tekstur syrupy yang kental. Kompleksitas rasa herbal dan rempah eksotis yang tidak bisa Anda temukan di kopi lain.",
-      },
-    ],
+    items: [], // Perhatikan : Array ini sekarang kosong dulu
     search: "",
+    // Fungsi ini otomatis jalan saat Alpine ngeload
+    async init() {
+      try {
+        const response = await fetch("products.json"); // Ambil data dari products.json
+        this.items = await response.json(); // Simpan data ke variable items
+      } catch (error) {
+        console.error("Gagal memuat data produk:", error);
+        // Fallback kalau error (Opsional)
+        Alpine.store("notification").notify("Gagal mengambil data produk!");
+      }
+    },
     get filteredItems() {
       return this.items.filter((item) => {
         const matchesSearch = item.name
           .toLowerCase()
           .includes(this.search.toLowerCase());
-        const matchesCategory =
+        const mathcesCategory =
           this.selectedCategory === "All" ||
           item.category === this.selectedCategory;
-        return matchesSearch && matchesCategory;
+        return matchesSearch && mathcesCategory;
       });
     },
+
     filterCategory(category) {
       this.selectedCategory = category;
     },
   });
 
-  // STORE UI (NEW: Mengatur Tampilan Sidebar/Modal)
+  // STORE UI (Mengatur Tampilan Sidebar/Modal)
   Alpine.store("ui", {
     isNavbarOpen: false,
     isSearchOpen: false,
@@ -80,7 +50,6 @@ document.addEventListener("alpine:init", () => {
       if (this.isSearchOpen) {
         this.isNavbarOpen = false;
         this.isCartOpen = false;
-        // Focus logic will be handled in HTML x-effect or $nextTick
       }
     },
     toggleCart() {
@@ -94,7 +63,7 @@ document.addEventListener("alpine:init", () => {
       this.isNavbarOpen = false;
       this.isSearchOpen = false;
       this.isCartOpen = false;
-    }
+    },
   });
 
   // 2. STORE CART (Keranjang Belanja)
@@ -155,17 +124,7 @@ document.addEventListener("alpine:init", () => {
       localStorage.setItem("cart", JSON.stringify(this.items));
     },
     checkout(customerData) {
-      if (
-        !customerData.name.trim() ||
-        !customerData.email.trim() ||
-        !customerData.phone.trim()
-      ) {
-        Alpine.store("notification").notify(
-          "Data pelanggan tidak boleh kosong!"
-        );
-        return;
-      }
-      // 1. Validasi Input Kosong
+      // 1. Validasi input kosong (trim spasi)
       if (
         !customerData.name.trim() ||
         !customerData.email.trim() ||
@@ -177,25 +136,41 @@ document.addEventListener("alpine:init", () => {
         return;
       }
 
-      // 2. [BARU] Validasi Format Nomor HP
-      // Cek apakah panjang nomor kurang dari 10 digit?
-      if (customerData.phone.length < 10) {
+      // 2. Validasi format email (pakai regex)
+      // untuk ngecek apakah ada @ dan titik (.) yang wajar
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(customerData.email)) {
+        Alpine.store("notification").notify("Format email tidak valid!");
+        return;
+      }
+
+      // 3. Validasi no hp (hanya angka dan minimal 10 digit)
+      const phoneRegex = /^[0-9]{10,}$/;
+      if (!phoneRegex.test(customerData.phone)) {
         Alpine.store("notification").notify(
-          "Nomor WhatsApp tidak valid (min. 10 angka)!"
+          "Nomor HP harus angka & minimal 10 digit"
         );
         return;
       }
+
+      // Jika lolos validasi
       if (this.items.length === 0) return;
-      const itemsList = this.items
+
+      // Format list barang
+      const itemList = this.items
         .map(
           (item) => `${item.name} (${item.quantity} x ${rupiah(item.price)})`
         )
         .join("\n");
-      const message = `Halo Kopi Senja, saya mau pesan:\n\n${itemsList}\n\nTotal: ${rupiah(
+
+      // Susun Pesan ke WA
+      const message = `Halo kopi senja, saya mau memesan:\n\n${itemList}\n\nTotal: ${rupiah(
         this.total
       )}\n\n-- Data Pemesan --\nNama: ${customerData.name}\nEmail: ${
         customerData.email
       }\nNo HP: ${customerData.phone}`;
+
+      // Buka WA
       window.open(
         `https://wa.me/6285777136377?text=${encodeURIComponent(message)}`
       );
@@ -205,7 +180,7 @@ document.addEventListener("alpine:init", () => {
   // 3. STORE DETAIL (Untuk Modal Popup)
   Alpine.store("detail", {
     isOpen: false,
-    item: {}, // Awalnya kosong, ini yang bikin error kalau gak di-handle di HTML
+    item: {},
     show(newItem) {
       this.item = newItem;
       this.isOpen = true;

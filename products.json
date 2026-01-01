@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "Robusta Brazil",
+    "price": 24000,
+    "img": "1.jpg",
+    "category": "Robusta",
+    "desc": "Kopi dengan karakter body yang tebal dan rasa pahit cokelat yang dominan."
+  },
+  {
+    "id": 2,
+    "name": "Arabica Blend",
+    "price": 25000,
+    "img": "2.jpg",
+    "category": "Arabica",
+    "desc": "Perpaduan biji pilihan dengan tingkat keasaman medium dan aroma floral."
+  },
+  {
+    "id": 3,
+    "name": "Primo Passo",
+    "price": 25000,
+    "img": "3.jpg",
+    "category": "Blend",
+    "desc": "Signature blend kami untuk pecinta Espresso. Crema tebal dan tekstru creamy."
+  },
+  {
+    "id": 4,
+    "name": "Aceh Gayo",
+    "price": 23000,
+    "img": "4.jpg",
+    "category": "Arabica",
+    "desc": "Kopi legendaris Indonesia. Aroma earthy khas dan body berat."
+  },
+  {
+    "id": 5,
+    "name": "Sumatera Mandheling",
+    "price": 23000,
+    "img": "5.jpg",
+    "category": "Arabica",
+    "desc": "Kopi premium dengan tekstur syrupy dan rasa rempah eksotis."
+  }
+]
